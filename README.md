@@ -68,6 +68,8 @@ As a best practice, your code should allow for the fact that ```@odata.nextLink`
 
 /// how to implement a generator for paginated responses, show generators.py sample
 
+/// in the pagination sample, we looked at the aggregation of all messages for the current user; in this sample, we're adding the concept of a mailfolder, so that you can step through messages in a particular folder if desired
+
 ## Contributing
 
 These samples are open source, released under the [MIT License](https://github.com/microsoftgraph/python-sample-pagination/blob/master/LICENSE). Issues (including feature requests and/or questions about this sample) and [pull requests](https://github.com/microsoftgraph/python-sample-pagination/pulls) are welcome. If there's another Python sample you'd like to see for Microsoft Graph, we're interested in that feedback as well &mdash; please log an [issue](https://github.com/microsoftgraph/python-sample-pagination/issues) and let us know!

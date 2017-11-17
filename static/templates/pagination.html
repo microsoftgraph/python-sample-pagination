@@ -1,0 +1,49 @@
+% import bottle
+% endpoint = bottle.request.query.endpoint
+% first_page = endpoint[:endpoint.find('?')] if '?' in endpoint else endpoint
+% next_page = graphdata.get('@odata.nextLink', '')
+<!DOCTYPE html>
+<!-- Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+See LICENSE in the source repository root for complete license information. -->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pagination Basics</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="/static/css/site.css?version=1.01" />
+    </head>
+    <body>
+        <div class="container homepage-container">
+            <h1>{{endpoint}}</h1>
+            <table class="endpoint-table">
+                <tr>
+                    <th>@odata.context:</th>
+                    <td>{{graphdata.get('@odata.context', '')}}</td>
+                </tr>
+                <tr>
+                    <th>@odata.nextLink:</th>
+                    <td>{{next_page}}&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='/pagination?endpoint={{next_page}}'">Next Page</button></td>
+                </tr>
+                <tr>
+                    <th>value:</th>
+                    <td>
+                        <table class="data-table">
+                            <tr>
+                                <td>Sent</td>
+                                <td>Subject</td>
+                                <td>Size</td>
+                            </tr>
+                            % for message in graphdata.get('value', []):
+                            <tr>
+                                <td>{{message['sentDateTime']}}</td>
+                                <td>{{message['subject'][:65]}}</td>
+                                <td align="right">{{int(len(str(message))/1024)}}K</td>
+                            </tr>
+                            % end
+                        </table>
+                    </td>
+                </tr>
+        </div>
+    </body>
+</html>

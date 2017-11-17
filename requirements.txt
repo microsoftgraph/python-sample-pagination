@@ -1,0 +1,2 @@
+Bottle>=0.12.13
+Requests>=2.18.4

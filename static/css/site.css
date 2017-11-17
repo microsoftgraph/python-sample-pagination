@@ -1,0 +1,76 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* home-page styling */
+
+.homepage-container {
+  width: 1000px;
+}
+
+button.homepage {
+  margin: 10px;
+}
+
+/* .endpoint-table style */
+
+.endpoint-table {
+  margin: 0 0 0 0;
+  width: 100%;
+  display: table;
+  border-collapse: separate;
+  border-spacing: 5px;
+  font-family: Consolas,Monaco,Lucida Console,Courier New, monospace;
+  font-size: 14px;
+}
+
+.endpoint-table th {
+  color: #ffffff;
+  background: #286090;
+  padding: 6px 12px;
+  text-align: right;
+}
+
+.endpoint-table td {
+  color: #000000;
+  padding: 6px 12px;
+  border: 1px solid #286090;
+}
+
+.btn-pbasics {
+  width: 150px !important;
+}
+
+/* data-table */
+
+.data-table {
+  margin: 0 0 0 0;
+  width: 100%;
+  display: table;
+}
+
+.data-table th {
+  color: #000000;
+  background: #dddddd;
+  padding: 6px 12px;
+  text-align: left;
+  border: none;
+}
+
+.data-table td {
+  color: #000000;
+  padding: 6px 12px;
+  border: none;
+}
+
+.data-table tr:nth-of-type(odd) {
+  background: #e8e8e8;
+}
+

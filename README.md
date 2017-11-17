@@ -79,3 +79,4 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 * [Paging Microsoft Graph data in your app](https://developer.microsoft.com/en-us/graph/docs/concepts/paging)
 * [OData JSON Format Version 4.0](http://docs.oasis-open.org/odata/odata-json-format/v4.0/cs01/odata-json-format-v4.0-cs01.html)
 * [Python Wiki: Generators](https://wiki.python.org/moin/Generators)
+* [Python authentication samples for Microsoft Graph](https://github.com/microsoftgraph/python-sample-auth)

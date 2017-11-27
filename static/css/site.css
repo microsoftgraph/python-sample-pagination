@@ -36,6 +36,7 @@ button.homepage {
   background: #286090;
   padding: 6px 12px;
   text-align: right;
+  width: 150px;
 }
 
 .endpoint-table td {

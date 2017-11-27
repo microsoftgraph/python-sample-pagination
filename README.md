@@ -32,7 +32,9 @@ When you query a paginated Graph API (for example, ```me/messages```), you'll ge
 * ```@odata.nextLink``` contains a link to the next page of results. You can do a GET against that endpoint to return the next page, which will contain a link to the next page after that, and you can repeat this process until the final page, which will not have this element.
 * ```value``` contains the returned data, as a list of JSON elements. In the ```me/messages``` example, this would be a list of email messages. The number of items returned is based on the page size. Each paginated API has a default page size (for example, the ```me/messages``` default is 10 messages), and you can specify a different page size if desired through use of the ```$top``` parameter. Note that the default page size and maximum page size may vary for different Graph APIs &mdash; see [Paging Microsoft Graph data in your app](https://developer.microsoft.com/en-us/graph/docs/concepts/paging) for more information.
 
-The following diagram shows how this works in practice, using the ```me/messages``` endpoint as an example. The message data has been omitted for clarity.
+The following diagram shows how this works in practice, using the ```me/messages``` endpoint as an example.
+
+/// run pagination.py as covered above
 
 ![pagination example](static/images/pagination-example.png)
 
@@ -40,11 +42,7 @@ The [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/b
 
 ![most recent 10 messages](static/images/pagination-sample.png)
 
-The **@odata.nextLink** value links to the next page of results. Choose **Next Page** to load the next page of paginated results, and you'll see this:
-
-![next 10 messages](static/images/pagination-sample2.png)
-
-Each time you click on the **Next Page**, the next page of results is loaded. This is the fundamental behavior of paginated responses from Graph APIs. In the next section, [Using generators](#using-generators), we'll look at how to implement a Python generator function to hide these details and work with the result set as if it were a standard Python iterable.
+The **@odata.nextLink** value links to the next page of results. Each time you click on the **Next Page** button, the next page of results is loaded. This is the fundamental behavior of paginated responses from Graph APIs.
 
 ### What if @odata.nextLink is missing?
 
@@ -66,9 +64,47 @@ As a best practice, your code should allow for the fact that ```@odata.nextLink`
 
 ## Using generators
 
-/// how to implement a generator for paginated responses, show generators.py sample
+The Graph API returns _pages_ of results, as demonstrated in [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/pagination.py). But in your application or service, you may want to work with a single non-paginated collection of _items_ such as messages, users, or files. In the next sample, we'll create a Python [generator](https://wiki.python.org/moin/Generators) that hides the pagination details so that your application code can simply ask for a collection of messages and then iterate through them using standard Python idioms such as ```for messages in messages``` or ```next(message)```.
 
-/// in the pagination sample, we looked at the aggregation of all messages for the current user; in this sample, we're adding the concept of a mailfolder, so that you can step through messages in a particular folder if desired
+The ```messages()``` function in [generator.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/generator.py) returns a generator for a specified Graph session and mail folder. The code is simple:
+
+```python
+def messages(msgraph, mailfolder=None):
+    """Generator to return messages from a specified folder.
+    msgraph = authenticated Graph session object
+    mailfolder = name or id of mail folder; for example, 'inbox' or a
+                120-character ID value. If not specified, ALL messages
+                are returned, using the me/messages endpoint.
+    """
+    next_page = 'me/mailFolders/' + mailfolder + '/messages' if mailfolder else 'me/messages'
+    while next_page:
+        response = msgraph.get(next_page).json()
+        for msg in response.get('value', None):
+            yield msg
+        next_page = response.get('@odata.nextLink', None)
+```
+
+The key concept to understand in a Python generator is the ```yield``` statement, which returns a value but also retains the state of the generator function for the next call. We have an outer loop that steps through the pages (```while next_page:```) and an inner loop (```for msg in ...```) that returns each message from withing each page.
+
+To create the generator, we pass the Graph session connection object and a mail folder:
+
+```python
+MSG_GENERATOR = messages(MSGRAPH, 'inbox')
+```
+
+Then the calling code simply uses Python's built-in ```next()``` function to retrieve messages:
+
+```python
+@bottle.route('/generator')
+@bottle.view('generator.html')
+def generator():
+    """Example of using a Python generator to return paginated data."""
+    return {'graphdata': next(MSG_GENERATOR)}
+```
+
+After a page of results has been returned, the outer loop of the ```messages()``` function will retrieve the next page. The developer doesn't need to be aware of this, though: you can call ```next(MSG_GENERATOR)``` whenever you need the next message, without regard for the page boundaries. As a practical matter, you may notice a slightly longer response time whenever new page is retrieved (every 10th message, with the default page size of 10 messages), but the individual messages within each page are returned immediately without any need to call Graph, because they're in the page of results that is being retained in the state of the generator function after each ```yield``` statement.
+
+Python generators are recommended for working with all paginated results from Microsoft Graph. You can use the same technique demonstrated in this sample for users, groups, drive items, and other paginated responses from Graph APIs.
 
 ## Contributing
 

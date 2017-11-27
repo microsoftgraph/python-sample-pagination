@@ -29,14 +29,14 @@ Graph's approach to pagination for potentially large result sets uses the [odata
 When you query a paginated Graph API (for example, ```me/messages```), you'll get back a JSON payload that contains these top-level elements:
 
 * ```@odata.context``` contains a URI that identifies the type of data being returned. This value is the same for every page of the result set.
-* ```@odata.nextLink``` contains a link to the next page of results. You do a GET against that link to get the next page, which will contain a link to the next page after that, and you can repeat this process until the final page, which will not have this element.
+* ```@odata.nextLink``` contains a link to the next page of results. You can do a GET against that endpoint to return the next page, which will contain a link to the next page after that, and you can repeat this process until the final page, which will not have this element.
 * ```value``` contains the returned data, as a list of JSON elements. In the ```me/messages``` example, this would be a list of email messages. The number of items returned is based on the page size. Each paginated API has a default page size (for example, the ```me/messages``` default is 10 messages), and you can specify a different page size if desired through use of the ```$top``` parameter. Note that the default page size and maximum page size may vary for different Graph APIs &mdash; see [Paging Microsoft Graph data in your app](https://developer.microsoft.com/en-us/graph/docs/concepts/paging) for more information.
 
-The following diagram shows how this works in practice, using the ```me/messages``` endpoint as an example. The data for the messages themselves has been omitted, to clarify the general approach and how the pages are linked together.
+The following diagram shows how this works in practice, using the ```me/messages``` endpoint as an example. The message data has been omitted for clarity.
 
 ![pagination example](static/images/pagination-example.png)
 
-The [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/pagination.py) sample in this repo provides an interactive demonstration of how pagination works. After you install and run the sample, authenticate under your identity and you'll see the following page listing your most recent 10 messages:
+The [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/pagination.py) sample in this repo provides an interactive demonstration of how it works. After you install and run the sample, authenticate under your identity and you'll see the following page listing your most recent 10 messages:
 
 ![most recent 10 messages](static/images/pagination-sample.png)
 
@@ -44,23 +44,23 @@ The **@odata.nextLink** value links to the next page of results. Choose **Next P
 
 ![next 10 messages](static/images/pagination-sample2.png)
 
-Each time you click on the **Next Page**, the next page of results is loaded. This is the fundamental behavior of paginated responses from Graph APIs. In the next section, [Using generators](#using-generators), we'll look at how to implement a Python generator function to hide these details and iterate through the result set as a standard Python iterable.
+Each time you click on the **Next Page**, the next page of results is loaded. This is the fundamental behavior of paginated responses from Graph APIs. In the next section, [Using generators](#using-generators), we'll look at how to implement a Python generator function to hide these details and work with the result set as if it were a standard Python iterable.
 
 ### What if @odata.nextLink is missing?
 
-Some Graph APIs return all of the requested entities by default, and in that case the ```@odata.nextLink``` element is not provided. The absense of this element tells you that the returned ```value``` element contains all of the entities in a single page.
+Some Graph APIs return all of the requested entities by default, and in that case the ```@odata.nextLink``` element is not provided. The absense of this element tells you that the ```value``` element contains all entities in a single page.
 
-For example, you may see this JSON response when you request all of the [DriveItems](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/resources/driveitem) in your OneDrive root drive, by doing a GET to the ```https://graph.microsoft.com/v1.0/me/drive/root/children``` endpoint:
+For example, if there are less than 250 items in your OneDrive root folder, you will see this JSON response when you request all of the [DriveItems](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/resources/driveitem) in the folder by doing a GET to the ```https://graph.microsoft.com/v1.0/me/drive/root/children``` endpoint:
 
 ![root drive children](static/images/root-drive-children.png)
 
-Since there is no ```@odata.nextLink``` element, you know that this is a complete result set that contains all of the requested DriveItems. But the same API can also return paginated responses, if the result set is very large or if you use the ```$top``` query string parameter to limit the result set.
+Since there is no ```@odata.nextLink``` element, you know that this is a complete result set that contains all of the requested DriveItems. The default page size for this API is 250 items, so they all fit within a single page of results.
 
-Here's the JSON response when you add ```$top=10``` to the previous example:
+But the same API can also return paginated responses, if the result set is parger than the page size. For example, here we're using the ```$top``` query string parameter to return only the first 10 items from the same set:
 
 ![pagination via $top parameter](static/images/root-drive-children-top.png)
 
-In this case, we've received the first 10 DriveItems, and there is an ```@odata.nextLink``` value which we can use to query the next page.
+In this case, we've received the first 10 DriveItems, and there is an ```@odata.nextLink``` value which we can use to query the next page of 10 items.
 
 As a best practice, your code should allow for the fact that ```@odata.nextLink``` may be missing, in which case there is no pagination to be handled. There is an example of this in the generator sample below.
 

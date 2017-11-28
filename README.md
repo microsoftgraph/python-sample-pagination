@@ -75,7 +75,7 @@ The ```@odata.nextLink``` value links to the next page of results. Each time you
 
 ### What if @odata.nextLink is missing?
 
-Some Graph APIs return all of the requested entities by default, and in that case the ```@odata.nextLink``` element is not provided. The absense of this element tells you that the ```value``` element contains all entities in a single page.
+In some cases, Graph APIs return all of the requested entities in a single response, and in that case the `@odata.nextLink` element is missing from the response. This may also occur when you have received the last page of data. The absence of this property tells you that there are no more pages of data available in the collection.
 
 For example, if there are less than 250 items in your OneDrive root folder, you will see this JSON response when you request all of the [DriveItems](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/resources/driveitem) in the folder by doing a GET to the ```https://graph.microsoft.com/v1.0/me/drive/root/children``` endpoint:
 
@@ -83,13 +83,13 @@ For example, if there are less than 250 items in your OneDrive root folder, you 
 
 Since there is no ```@odata.nextLink``` element, you know that this is a complete result set that contains all of the requested DriveItems. The default page size for this API is 250 items, so they all fit within a single page of results.
 
-But the same API can also return paginated responses, if the result set is parger than the page size. For example, here we're using the ```$top``` query string parameter to return only the first 10 items from the same set:
+But the same API can return paginated responses, if the result set is larger than the page size. For example, here we're using the ```$top``` query string parameter to return only the first 10 items from the same set:
 
 ![pagination via $top parameter](static/images/root-drive-children-top.png)
 
 In this case, we've received the first 10 DriveItems, and there is an ```@odata.nextLink``` value which we can use to query the next page of 10 items.
 
-As a best practice, your code should allow for the fact that ```@odata.nextLink``` may be missing, in which case there is no pagination to be handled. There is an example of this in the generator sample below.
+When working with collections in Graph APIs, your code must always check for `@odata.nextLink` to determine whether there are additional pages of data available, and understand that if the property is missing the result is the last page of available data. There is an example of this in the generator sample below.
 
 ## Using generators
 

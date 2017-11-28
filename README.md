@@ -7,7 +7,6 @@ This repo contains Python-based examples of how to work with Graph's paginated r
 The samples in this repo use **messages** to illustrate how pagination works, but the same concepts can be applied to any Graph API that uses pagination, including [messages](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list_messages), [contacts](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list_contacts), [users](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list), [groups](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/group_list), and others.
 
 * [Installation](#installation)
-* [Running the samples](#running-the-samples)
 * [Basic concepts](#basic-concepts)
 * [Using generators](#using-generators)
 * [Contributing](#contributing)
@@ -15,12 +14,38 @@ The samples in this repo use **messages** to illustrate how pagination works, bu
 
 ## Installation
 
-/// how to install the samples and run them
+Before installing the samples, verify that you have these prerequisites in place:
 
-## Running the samples
+* Install Python from [https://www.python.org/](https://www.python.org/). We've tested the code with Python 3.6.2, but any Python 3.x version should work fine. If your code base is running under Python 2.7, you may find it helpful to use the [3to2](https://pypi.python.org/pypi/3to2) tools to port the code to Python 2.7.
+* To register your application for access to Microsoft Graph, you'll need either a [Microsoft account](https://www.outlook.com) or an [Office 365 for business account](https://msdn.microsoft.com/en-us/office/office365/howto/setup-development-environment#bk_Office365Account). If you don't have one of these, you can create a Microsoft account for free at [outlook.com](https://www.outlook.com).
 
-/// how to launch the samples
-/// note these use graphrest for auth; link to the auth repo for auth options
+Then follow these steps to install the sample code:
+
+1. Clone this repo: ```git clone https://github.com/microsoftgraph/python-sample-pagination.git```.
+2. Create and activate a virtual environment (optional). If you're new to Python virtual environments, [Miniconda](https://conda.io/miniconda.html) is a great place to start.
+3. In the root folder of your cloned repo, install the dependencies for the sample as listed in [requirements.txt](https://github.com/microsoftgraph/python-sample-pagination/blob/master/requirements.txt) with this command: ```pip install -r requirements.txt```.
+
+To complete the configuration of the samples, you'll need to register a new application in the Microsoft [Application Registration Portal](https://apps.dev.microsoft.com/). You only need to do this once, and then any Microsoft identity can be used to run the samples.
+
+Follow these steps to register a new application:
+
+1. Sign in to the [Application Registration Portal](https://apps.dev.microsoft.com/) using either your personal or work or school account.
+
+2. Under **My applications**, choose **Add an app**. If you're using an Office 365 account and see two categories listed (Converged or Azure AD only), choose **Add an app** for the Converged applications section.
+
+3. Enter an application name, and choose **Create**. (Do *not* choose **Guided Setup**.)
+
+4. Next you'll see the registration page for your app. Copy and save the **Application Id** field.You will need it later to complete the configuration process.
+
+5. Under **Application Secrets**, choose **Generate New Password**. A new password will be displayed in the **New password generated** dialog. Copy this password. You will need it later to complete the configuration process.
+
+6. Under **Platforms**, choose **Add platform** > **Web**.
+
+7. Under **Delegated Permissions**, add the **Mail.Read** permission.
+
+8. Enter `http://localhost:5000/login/authorized` as the Redirect URL, and then choose **Save**.
+
+As the final step in configuring the sample, modify the [config.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/config.py) file in the root folder of your cloned repo, and follow the instructions to enter your Client ID and Client Secret (which are referred to as Application Id and Password in the app registration portal). Then save the change, and you're ready to run the samples.
 
 ## Basic concepts
 
@@ -34,11 +59,15 @@ When you query a paginated Graph API (for example, ```me/messages```), you'll ge
 
 The following diagram shows how this works in practice, using the ```me/messages``` endpoint as an example.
 
-/// run pagination.py as covered above
-
 ![pagination example](static/images/pagination-example.png)
 
-The [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/pagination.py) sample in this repo provides an interactive demonstration of how it works. After you install and run the sample, authenticate under your identity and you'll see the following page listing your most recent 10 messages:
+The [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/pagination.py) sample in this repo provides an interactive demonstration of how it works. Follow the [Installation](#installation) instructions to install the sample, and then run it as follows:
+
+* At the command prompt: ```python pagination.py```
+* Navigate a browser to [http://localhost:5000](http://localhost:5000)
+* Choose **Connect** and authenticate with a Microsoft identity (organization account or Microsoft Account)
+
+You'll then see the following page listing your most recent 10 messages:
 
 ![most recent 10 messages](static/images/pagination-sample.png)
 
@@ -64,32 +93,40 @@ As a best practice, your code should allow for the fact that ```@odata.nextLink`
 
 ## Using generators
 
-The Graph API returns _pages_ of results, as demonstrated in [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/pagination.py). But in your application or service, you may want to work with a single non-paginated collection of _items_ such as messages, users, or files. In the next sample, we'll create a Python [generator](https://wiki.python.org/moin/Generators) that hides the pagination details so that your application code can simply ask for a collection of messages and then iterate through them using standard Python idioms such as ```for messages in messages``` or ```next(message)```.
+The Graph API returns _pages_ of results, as demonstrated in [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/pagination.py). But in your application or service, you may want to work with a single non-paginated collection of _items_ such as messages, users, or files. In this sample, we create a Python [generator](https://wiki.python.org/moin/Generators) that hides the pagination details so that your application code can simply ask for a collection of messages and then iterate through them using standard Python idioms such as ```for messages in messages``` or ```next(message)```.
 
-The ```messages()``` function in [generator.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/generator.py) returns a generator for a specified Graph session and mail folder. The code is simple:
+The [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/pagination.py) sample in this repo provides an interactive demonstration of how it works. Follow the [Installation](#installation) instructions to install the sample, and then run it as follows:
+
+* At the command prompt: ```python generator.py```
+* Navigate a browser to [http://localhost:5000](http://localhost:5000)
+* Choose **Connect** and authenticate with a Microsoft identity (organization account or Microsoft Account)
+
+You'll then see the most recent message you've received:
+
+![most recent message](static/images/generator-sample.png)
+
+Each time you click the **Next Message** button, you'll see the next message. The ```generator()``` function in [generator.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/generator.py) handles the details as shown here:
 
 ```python
-def messages(msgraph, mailfolder=None):
-    """Generator to return messages from a specified folder.
-    msgraph = authenticated Graph session object
-    mailfolder = name or id of mail folder; for example, 'inbox' or a
-                120-character ID value. If not specified, ALL messages
-                are returned, using the me/messages endpoint.
+def graph_generator(session, endpoint=None):
+    """Generator for paginated result sets returned by Microsoft Graph.
+    session = authenticated Graph session object
+    endpoint = the Graph endpoint (for example, 'me/messages' for messages,
+               or 'me/drive/root/children' for OneDrive drive items)
     """
-    next_page = 'me/mailFolders/' + mailfolder + '/messages' if mailfolder else 'me/messages'
-    while next_page:
-        response = msgraph.get(next_page).json()
-        for msg in response.get('value', None):
-            yield msg
-        next_page = response.get('@odata.nextLink', None)
+    while endpoint:
+        response = session.get(endpoint).json() # get next page of results
+        for item in response.get('value', None):
+            yield item # return next item from this page
+        endpoint = response.get('@odata.nextLink', None)
 ```
 
-The key concept to understand in a Python generator is the ```yield``` statement, which returns a value but also retains the state of the generator function for the next call. We have an outer loop that steps through the pages (```while next_page:```) and an inner loop (```for msg in ...```) that returns each message from withing each page.
+The key concept to understand in a Python generator is the ```yield``` statement, which returns a value but also retains the state of the generator function for the next call. We have an outer loop that steps through the paginated results (```while endpoint:```) and an inner loop (```for item in ...```) that returns the items from within each page.
 
-To create the generator, we pass the Graph session connection object and a mail folder:
+To create a generator at runtime, we pass the Graph session connection object and the API endpoint for retrieving messages:
 
 ```python
-MSG_GENERATOR = messages(MSGRAPH, 'inbox')
+MSG_GENERATOR = messages(MSGRAPH, 'me/messages')
 ```
 
 Then the calling code simply uses Python's built-in ```next()``` function to retrieve messages:
@@ -102,9 +139,9 @@ def generator():
     return {'graphdata': next(MSG_GENERATOR)}
 ```
 
-After a page of results has been returned, the outer loop of the ```messages()``` function will retrieve the next page. The developer doesn't need to be aware of this, though: you can call ```next(MSG_GENERATOR)``` whenever you need the next message, without regard for the page boundaries. As a practical matter, you may notice a slightly longer response time whenever new page is retrieved (every 10th message, with the default page size of 10 messages), but the individual messages within each page are returned immediately without any need to call Graph, because they're in the page of results that is being retained in the state of the generator function after each ```yield``` statement.
+We call ```next(MSG_GENERATOR)``` whenever we need the next message, and we don't need to be aware of the fact that paginated results are coming from Graph. As a practical matter, you may notice a slightly longer response time whenever a new page is retrieved (every 10th message, with the default page size of 10 messages in the sample), but the individual items within each page are returned immediately without any need to call Graph, because they're in the page of results that is being retained in the state of the generator function after each ```yield``` statement.
 
-Python generators are recommended for working with all paginated results from Microsoft Graph. You can use the same technique demonstrated in this sample for users, groups, drive items, and other paginated responses from Graph APIs.
+Python generators are recommended for working with all paginated results from Microsoft Graph. You can use the ```generator()``` function in this sample for users, groups, drive items, and other paginated responses from Graph APIs.
 
 ## Contributing
 

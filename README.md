@@ -115,7 +115,8 @@ def graph_generator(session, endpoint=None):
                or 'me/drive/root/children' for OneDrive drive items)
     """
     while endpoint:
-        response = session.get(endpoint).json() # get next page of results
+        print('Retrieving next page ...')
+        response = session.get(endpoint).json()
         for item in response.get('value', None):
             yield item # return next item from this page
         endpoint = response.get('@odata.nextLink', None)

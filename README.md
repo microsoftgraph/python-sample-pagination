@@ -4,7 +4,7 @@ Some Microsoft Graph queries can return a large number of entities, more than ca
 
 This repo contains Python-based examples of how to work with Graph's paginated responses. For a high-level overview of how pagination works in Microsoft Graph, see [Paging Microsoft Graph data in your app](https://developer.microsoft.com/en-us/graph/docs/concepts/paging).
 
-The samples in this repo use **messages** to illustrate how pagination works, but the same concepts can be applied to any Graph API that uses pagination, including [messages](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list_messages), [contacts](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list_contacts), [users](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list), [groups](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/group_list), and others.
+The samples in this repo use [messages](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list_messages) to illustrate how pagination works, but the same concepts can be applied to any Graph API that uses pagination, including messages, [contacts](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list_contacts), [users](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list), [groups](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/group_list), and others.
 
 * [Installation](#installation)
 * [Basic concepts](#basic-concepts)
@@ -25,7 +25,7 @@ Then follow these steps to install the sample code:
 2. Create and activate a virtual environment (optional). If you're new to Python virtual environments, [Miniconda](https://conda.io/miniconda.html) is a great place to start.
 3. In the root folder of your cloned repo, install the dependencies for the sample as listed in [requirements.txt](https://github.com/microsoftgraph/python-sample-pagination/blob/master/requirements.txt) with this command: ```pip install -r requirements.txt```.
 
-To complete the configuration of the samples, you'll need to register a new application in the Microsoft [Application Registration Portal](https://apps.dev.microsoft.com/). You only need to do this once, and then any Microsoft identity can be used to run the samples.
+To complete the configuration of the samples, you'll need to register a new application in the Microsoft Application Registration Portal. You only need to do this once, and then any Microsoft identity can be used to run the samples.
 
 Follow these steps to register a new application:
 
@@ -63,15 +63,15 @@ The following diagram shows how this works in practice, using the ```me/messages
 
 The [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/pagination.py) sample in this repo provides an interactive demonstration of how it works. Follow the [Installation](#installation) instructions to install the sample, and then run it as follows:
 
-* At the command prompt: ```python pagination.py```
-* Navigate a browser to [http://localhost:5000](http://localhost:5000)
-* Choose **Connect** and authenticate with a Microsoft identity (organization account or Microsoft Account)
+1. At the command prompt: ```python pagination.py```
+2. Navigate a browser to [http://localhost:5000](http://localhost:5000)
+3. Choose **Connect** and authenticate with a Microsoft identity (organization account or Microsoft Account)
 
 You'll then see the following page listing your most recent 10 messages:
 
 ![most recent 10 messages](static/images/pagination-sample.png)
 
-The **@odata.nextLink** value links to the next page of results. Each time you click on the **Next Page** button, the next page of results is loaded. This is the fundamental behavior of paginated responses from Graph APIs.
+The ```@odata.nextLink``` value links to the next page of results. Each time you click on the **Next Page** button, the next page of results is loaded. This is the fundamental behavior of paginated responses from Graph APIs.
 
 ### What if @odata.nextLink is missing?
 
@@ -95,11 +95,11 @@ As a best practice, your code should allow for the fact that ```@odata.nextLink`
 
 The Graph API returns _pages_ of results, as demonstrated in [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/pagination.py). But in your application or service, you may want to work with a single non-paginated collection of _items_ such as messages, users, or files. In this sample, we create a Python [generator](https://wiki.python.org/moin/Generators) that hides the pagination details so that your application code can simply ask for a collection of messages and then iterate through them using standard Python idioms such as ```for messages in messages``` or ```next(message)```.
 
-The [pagination.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/pagination.py) sample in this repo provides an interactive demonstration of how it works. Follow the [Installation](#installation) instructions to install the sample, and then run it as follows:
+The [generator.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/generator.py) sample in this repo provides an interactive demonstration of how it works. Follow the [Installation](#installation) instructions to install the sample, and then run it as follows:
 
-* At the command prompt: ```python generator.py```
-* Navigate a browser to [http://localhost:5000](http://localhost:5000)
-* Choose **Connect** and authenticate with a Microsoft identity (organization account or Microsoft Account)
+1. At the command prompt: ```python generator.py```
+2. Navigate a browser to [http://localhost:5000](http://localhost:5000)
+3. Choose **Connect** and authenticate with a Microsoft identity (organization account or Microsoft Account)
 
 You'll then see the most recent message you've received:
 
@@ -132,10 +132,8 @@ MSG_GENERATOR = messages(MSGRAPH, 'me/messages')
 Then the calling code simply uses Python's built-in ```next()``` function to retrieve messages:
 
 ```python
-@bottle.route('/generator')
-@bottle.view('generator.html')
 def generator():
-    """Example of using a Python generator to return paginated data."""
+    """Example of using a Python generator to return items from paginated data."""
     return {'graphdata': next(MSG_GENERATOR)}
 ```
 

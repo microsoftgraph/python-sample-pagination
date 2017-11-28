@@ -39,19 +39,17 @@ def generator():
     """Example of using a Python generator to return paginated data."""
     return {'graphdata': next(MSG_GENERATOR)}
 
-def messages(msgraph, mailfolder=None):
-    """Generator to return messages from a specified folder.
-    msgraph = authenticated Graph session object
-    mailfolder = name or id of mail folder; for example, 'inbox' or a
-                120-character ID value. If not specified, ALL messages
-                are returned, using the me/messages endpoint.
+def graph_generator(session, endpoint=None):
+    """Generator for paginated result sets returned by Microsoft Graph.
+    session = authenticated Graph session object
+    endpoint = the Graph endpoint (for example, 'me/messages' for messages,
+               or 'me/drive/root/children' for OneDrive drive items)
     """
-    next_page = 'me/mailFolders/' + mailfolder + '/messages' if mailfolder else 'me/messages'
-    while next_page:
-        response = msgraph.get(next_page).json()
-        for msg in response.get('value', None):
-            yield msg
-        next_page = response.get('@odata.nextLink', None)
+    while endpoint:
+        response = session.get(endpoint).json() # get next page of results
+        for item in response.get('value', None):
+            yield item # return next item from this page
+        endpoint = response.get('@odata.nextLink', None)
 
 @bottle.route('/static/<filepath:path>')
 def server_static(filepath):
@@ -60,5 +58,7 @@ def server_static(filepath):
     return bottle.static_file(filepath, root=os.path.join(root_folder, 'static'))
 
 if __name__ == '__main__':
-    MSG_GENERATOR = messages(MSGRAPH, 'inbox')
+    # To return messages from folder foldername, use this endpoint instead:
+    # 'me/mailFolders/foldername/messages'
+    MSG_GENERATOR = graph_generator(MSGRAPH, 'me/messages')
     bottle.run(app=bottle.app(), server='wsgiref', host='localhost', port=5000)

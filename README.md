@@ -142,7 +142,11 @@ def generator():
 
 Call ```next(MSG_GENERATOR)``` whenever you need the next message, and you don't need to be aware of the fact that paginated results are coming from Microsoft Graph. You might notice a slightly longer response time whenever a new page is retrieved (every 10th message, with the default page size of 10 messages in the sample), but the individual items within each page are returned immediately without any need to call Microsoft Graph, because they're in the page of results that is being retained in the state of the generator function after each ```yield``` statement.
 
-Python generators are recommended for working with all paginated results from Microsoft Graph. You can use the ```generator()``` function in this sample for users, groups, drive items, and other paginated responses from Microsoft Graph APIs.
+Here's an example of the console output that you'll see if you click the **Next Message** button 10 or more times while running the generator sample:
+
+![console output](static/images/console-output.png)
+
+Python generators are recommended for working with all paginated results from Microsoft Graph. You can use the ```generator``` function in this sample for messages, users, groups, drive items, and other paginated responses from Microsoft Graph APIs.
 
 ## Contributing
 

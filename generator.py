@@ -36,7 +36,7 @@ def authorized():
 @bottle.route('/generator')
 @bottle.view('generator.html')
 def generator():
-    """Example of using a Python generator to return paginated data."""
+    """Example of using a Python generator to return items from paginated data."""
     return {'graphdata': next(MSG_GENERATOR)}
 
 def graph_generator(session, endpoint=None):

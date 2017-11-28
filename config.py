@@ -1,7 +1,7 @@
-"""
-This file contains configuration settings for running the Python auth samples
-locally. In a production deployment, this information should be saved in a
-database or other secure storage mechanism.
+"""Configuration settings for running the Python auth samples locally.
+
+In a production deployment, this information should be saved in a database or
+other secure storage mechanism.
 """
 
 CLIENT_ID = 'PUT YOUR CLIENT ID HERE'
@@ -14,7 +14,8 @@ TOKEN_ENDPOINT = '/oauth2/v2.0/token'
 
 RESOURCE = 'https://graph.microsoft.com/'
 API_VERSION = 'v1.0'
-SCOPES = ['Mail.Read'] # add other scopes/permissions as needed
+SCOPES = ['Mail.Read'] # Add other scopes/permissions as needed.
+
 
 # This code can be removed after configuring CLIENT_ID and CLIENT_SECRET above.
 if ' ' in CLIENT_ID or ' ' in CLIENT_SECRET:

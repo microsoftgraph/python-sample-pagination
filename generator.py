@@ -55,9 +55,8 @@ def graph_generator(session, endpoint=None):
     while endpoint:
         print('Retrieving next page ...')
         response = session.get(endpoint).json()
-        yield from response.get['value']
+        yield from response.get('value')
         endpoint = response.get('@odata.nextLink')
-
 
 @bottle.route('/static/<filepath:path>')
 def server_static(filepath):
@@ -65,9 +64,10 @@ def server_static(filepath):
     root_folder = os.path.abspath(os.path.dirname(__file__))
     return bottle.static_file(filepath, root=os.path.join(root_folder, 'static'))
 
-
 if __name__ == '__main__':
-    # To return messages from folder foldername, use this endpoint instead:
+    # The 'me/messages' endpoint returns the aggregation of all messages
+    # sent to the current authenticated user. To return messages from a
+    # specific mailbox folder, use this variation instead:
     # 'me/mailFolders/foldername/messages'
     MSG_GENERATOR = graph_generator(MSGRAPH, 'me/messages')
     bottle.run(app=bottle.app(), server='wsgiref', host='localhost', port=5000)

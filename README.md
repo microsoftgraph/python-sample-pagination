@@ -107,7 +107,8 @@ You'll then see the most recent message you've received:
 
 ![most recent message](static/images/generator-sample.png)
 
-Each time you choose **Next Message**, you'll see the next message. The ```generator()``` function in [generator.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/generator.py) handles the details, as shown.
+Each time you choose **Next Message**, you'll see the next message. The ```generator()``` function in [generator.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/generator.py) handles the details of retrieving pages of results and then returning (_yielding_) the messages
+one at a time.
 
 ```python
 def graph_generator(session, endpoint=None):
@@ -119,12 +120,11 @@ def graph_generator(session, endpoint=None):
     while endpoint:
         print('Retrieving next page ...')
         response = session.get(endpoint).json()
-        for item in response.get('value', None):
-            yield item # return next item from this page
-        endpoint = response.get('@odata.nextLink', None)
+        yield from response.get('value')
+        endpoint = response.get('@odata.nextLink')
 ```
 
-The key concept to understand in a Python generator is the ```yield``` statement, which returns a value but also retains the state of the generator function for the next call. An outer loop steps through the paginated results (```while endpoint:```) and an inner loop (```for item in ...```) returns the items from within each page.
+The key concept to understand in this code is the ```yield from``` statement, which returns values from the specified iterator &mdash; ```response.get('value')``` in this case &mdash; until it is exhausted.
 
 To create a generator at runtime, pass the Microsoft Graph session connection object and the API endpoint for retrieving messages:
 

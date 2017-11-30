@@ -44,7 +44,6 @@ def generator():
     # Priming the iterator.
     return {'graphdata': next(MSG_GENERATOR)}
 
-
 def graph_generator(session, endpoint=None):
     """Generator for paginated result sets returned by Microsoft Graph.
 

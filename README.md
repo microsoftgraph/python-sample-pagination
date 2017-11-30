@@ -16,38 +16,9 @@ The samples in this repo use [messages](https://developer.microsoft.com/en-us/gr
 
 ## Installation
 
-Before installing the samples, verify that you have these prerequisites in place:
+To install and configure the samples, see the instructions in [Installing the Python REST samples](https://github.com/microsoftgraph/python-sample-auth/blob/master/installation.md). Note that the samples in this repo require **User.Read** and **Mail.Read** permissions.
 
-* Install Python from [https://www.python.org/](https://www.python.org/). We've tested the code with Python 3.6.2, but any Python 3.x version should work fine. If your code base is running under Python 2.7, you might find it helpful to use the [3to2](https://pypi.python.org/pypi/3to2) tools to port the code to Python 2.7.
-* To register your application for access to Microsoft Graph, you'll need either a [Microsoft account](https://www.outlook.com) or an [Office 365 for business account](https://msdn.microsoft.com/en-us/office/office365/howto/setup-development-environment#bk_Office365Account). If you don't have one of these, you can create a Microsoft account for free at [outlook.com](https://www.outlook.com).
-
-Follow these steps to install the sample code:
-
-1. Clone this repo: ```git clone https://github.com/microsoftgraph/python-sample-pagination.git```.
-2. Create and activate a virtual environment (optional). If you're new to Python virtual environments, [Miniconda](https://conda.io/miniconda.html) is a great place to start.
-3. In the root folder of your cloned repo, install the dependencies for the sample as listed in [requirements.txt](https://github.com/microsoftgraph/python-sample-pagination/blob/master/requirements.txt) with this command: ```pip install -r requirements.txt```.
-
-To complete the configuration of the samples, you'll need to register a new application in the Microsoft Application Registration Portal. You only need to do this once, and then any Microsoft identity can be used to run the samples.
-
-Follow these steps to register a new application:
-
-1. Sign in to the [Application Registration Portal](https://apps.dev.microsoft.com/) using either your personal or work or school account.
-
-2. Under **My applications**, choose **Add an app**. If you're using an Office 365 account and see two categories listed (Converged or Azure AD only), choose **Add an app** for the Converged applications section.
-
-3. Enter an application name, and choose **Create**. (Do *not* choose **Guided Setup**.)
-
-4. Next you'll see the registration page for your app. Copy and save the **Application Id** field. You'll need it later to complete the configuration process.
-
-5. Under **Application Secrets**, choose **Generate New Password**. A new password will be displayed in the **New password generated** dialog. Copy this password. You'll need it later to complete the configuration process.
-
-6. Under **Platforms**, choose **Add platform** > **Web**.
-
-7. Under **Delegated Permissions**, add the **Mail.Read** permission.
-
-8. Enter `http://localhost:5000/login/authorized` as the Redirect URL, and then choose **Save**.
-
-As the final step in configuring the sample, modify the [config.py](https://github.com/microsoftgraph/python-sample-pagination/blob/master/config.py) file in the root folder of your cloned repo, and follow the instructions to enter your Client ID and Client Secret (which are referred to as Application ID and Password in the app registration portal). Save the change, and you're ready to run the samples.
+After you've completed those steps, you'll be able to run the ```pagination.py``` and ```generator.py``` samples as covered below.
 
 ## Basic concepts
 

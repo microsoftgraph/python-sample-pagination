@@ -1,5 +1,7 @@
 # Working with paginated Microsoft Graph responses in Python
 
+![language:Python](https://img.shields.io/badge/Language-Python-blue.svg?style=flat-square) ![license:MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square) 
+
 Some Microsoft Graph queries can return a large number of entities, more than can be included in a single JSON payload. In those cases, Microsoft Graph _paginates_ responses to improve performance. This also makes the response more convenient and flexible for you.
 
 This repo contains Python-based samples that show you how to work with paginated responses in Microsoft Graph. For a high-level overview of how pagination works, see [Paging Microsoft Graph data in your app](https://developer.microsoft.com/en-us/graph/docs/concepts/paging).
@@ -125,7 +127,12 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 
 ## Resources
 
+Documentation:
 * [Paging Microsoft Graph data in your app](https://developer.microsoft.com/en-us/graph/docs/concepts/paging)
 * [OData JSON Format Version 4.0](http://docs.oasis-open.org/odata/odata-json-format/v4.0/cs01/odata-json-format-v4.0-cs01.html)
 * [Python Wiki: Generators](https://wiki.python.org/moin/Generators)
+
+Samples:
 * [Python authentication samples for Microsoft Graph](https://github.com/microsoftgraph/python-sample-auth)
+* [Working with paginated Microsoft Graph responses in Python](https://github.com/microsoftgraph/python-sample-pagination)
+* [Sending mail via Microsoft Graph from Python](https://github.com/microsoftgraph/python-sample-send-mail)

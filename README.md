@@ -6,8 +6,6 @@ This repo contains Python-based samples that show you how to work with paginated
 
 The samples in this repo use [messages](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list_messages) to illustrate how pagination works, but the same concepts can be applied to any Microsoft Graph API that uses pagination, including messages, [contacts](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list_contacts), [users](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_list), [groups](https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/group_list), and others.
 
-## In this article
-
 * [Installation](#installation)
 * [Basic concepts](#basic-concepts)
 * [Using generators](#using-generators)
